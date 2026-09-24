@@ -1,12 +1,20 @@
-# Zaluea 2.0
-Fast, free & stealthy Ultraviolet web proxy. No API key needed — the proxy backend is self-hosted.
+# Zaluea 3.0
+Fast, free & stealthy Ultraviolet web proxy. cherri-style dark-rose UI with themes.
 
 ## Run it
 ```sh
 npm install
 npm start
 ```
-Then open http://localhost:8080
+Then open http://localhost:8080 (hard-refresh with Ctrl+Shift+R if you see the old look — assets are versioned `?v=3`).
+
+## School Chromebook use (no Node? no problem)
+The `Site/` folder is a fully static app. Upload it to any free static host
+(GitHub Pages, Netlify Drop, Cloudflare Pages, Vercel) over HTTPS and it
+auto-rotates through free public bare backends — no `npm start` needed.
+If the school filter blocks shared hosting domains ("domain" errors), use
+`⧉ Blank` (about:blank hides the URL entirely) + `🕶 Cloak`, or paste any
+working bare URL in ⚙ Settings → Proxy backend → Use custom.
 
 ## What changed
 - New modern glass UI (home + games)
