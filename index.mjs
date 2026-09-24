@@ -1,4 +1,4 @@
-import { createBareServer } from '@tomphttp/bare-server-node';
+import BareServer from '@tomphttp/bare-server-node';
 import { uvPath } from '@titaniumnetwork-dev/ultraviolet';
 import express from 'express';
 import http from 'http';
@@ -10,19 +10,16 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Self-hosted free proxy backend (no API key needed).
+// Bare v1 matches the Ultraviolet v1 client in Site/uv/.
 // Primary route /bare/ + stealth alias /api/ so filters
 // looking for "/bare/" don't trivially block it.
-const bare = createBareServer('/bare/');
-const bareStealth = createBareServer('/api/');
-
-function routeBare(req, res) {
-  if (bare.shouldRoute(req) || bareStealth.shouldRoute(req)) return true;
-  return false;
-}
+const Bare = BareServer.default || BareServer;
+const bare = new Bare('/bare/', {});
+const bareStealth = new Bare('/api/', {});
 
 function handleBare(req, res) {
-  if (bare.shouldRoute(req)) { bare.routeRequest(req, res); return true; }
-  if (bareStealth.shouldRoute(req)) { bareStealth.routeRequest(req, res); return true; }
+  if (bare.route_request(req, res)) return true;
+  if (bareStealth.route_request(req, res)) return true;
   return false;
 }
 
@@ -47,8 +44,8 @@ server.on('request', (req, res) => {
 });
 
 server.on('upgrade', (req, socket, head) => {
-  if (bare.shouldRoute(req)) { bare.routeUpgrade(req, socket, head); return; }
-  if (bareStealth.shouldRoute(req)) { bareStealth.routeUpgrade(req, socket, head); return; }
+  if (bare.route_upgrade(req, socket, head)) return;
+  if (bareStealth.route_upgrade(req, socket, head)) return;
   socket.end();
 });
 
