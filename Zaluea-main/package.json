@@ -1,0 +1,15 @@
+{
+  "name": "zaluea",
+  "version": "2.0.0",
+  "description": "Zaluea - fast, stealthy Ultraviolet web proxy",
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs",
+    "dev": "node index.mjs"
+  },
+  "dependencies": {
+    "@titaniumnetwork-dev/ultraviolet": "^1.0.11",
+    "@tomphttp/bare-server-node": "^2.0.3",
+    "express": "^4.18.2"
+  }
+}
