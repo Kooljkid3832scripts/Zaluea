@@ -1,55 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cherri">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no">
-    <link rel="icon" type="image/x-icon" href="./images/logo.png">
-    <link rel="stylesheet" href="index.css">
-    <title>Zaluea | Games</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <script>try{var t=localStorage.getItem("z_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link id="favicon" rel="icon" type="image/png" href="images/logo.png?v=3" />
+  <link rel="stylesheet" href="index.css?v=3" />
+  <title id="pageTitle">Zaluea | Games</title>
 </head>
 <body>
-    <div class="bar">
-        <div class="main_title"><a href="/">Zaluea</a></div>
-        <div class="button games" id="button"><a href="games.html">Games</a></div>
-        <div class="button ytlink" id="button1" onclick="quickLink('hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-')">YouTube</div>
-        <div class="button tabconfig" id="button2" onclick="settings()">Tab Config</div>
-        <div class="button updates_btn" id="button3" onclick="updates()">Updates</div>
-        <div class="settings" id="settings">
-            <div class="settingsstuff title_main">Settings</div>
-            <center>
-                <input class="setTitle" placeholder="Title" onkeyup="titleSet(this.value)">
-                <input class="setIco" placeholder="Icon" onkeyup="iconSet(this.value)">
-                <div class="resetButton" onclick="reset()">Reset</div>
-            </center>
-        </div>
-        <div class="updates" id="updates">
-            <div class="updatetitle title_updates">Updates</div>
-            <center>
-                <div class="updatespage" id="updatespage"></div>
-            </center>
-        </div>
-        <div class="button closegame" id="button_closegame" onclick="closeGame()">Close Game</div>
-        <div class="button fullscreengame" id="button_fullscreengame" onclick="fullscreenGame()">Fullscreen Game</div>
+  <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+  <nav class="nav glass">
+    <a class="brand" href="/"><span class="logo">Z</span><span class="brand-name"><span>Zaluea</span></span></a>
+    <div class="nav-links">
+      <a href="/" class="nav-btn">Home</a>
+      <a href="games.html" class="nav-btn active">Games</a>
+      <button class="nav-btn" id="cloakBtn">🕶 Cloak</button>
+      <button class="nav-btn icon" id="settingsBtn">⚙</button>
     </div>
-    <div class="games_title">Games</div>
-    <center>
-        <div class="page">
-        <div id="gameslist"></div>
-        </div>
-        <div class="text">More games will be added in the future!</div>
-    </center>
-    <iframe src="" class="gamewindow" id="gamewindow"></iframe>
-    <div class="bottom">
-        <div class="textbottom title_bottom">Zaluea Network 2022</div>
-        <i class="linkbottom other"><a href="https://github.com/TheIcy/Zaluea">GitHub</a></i>
-        <i class="linkbottom discord"><a href="https://discord.gg/dE7puEgwap">Discord</a></i>
+  </nav>
+
+  <main class="hero">
+    <h1 class="title" style="font-size:clamp(44px,7vw,72px)">Games<span class="dot">.</span></h1>
+    <p class="subtitle">Unblocked, runs locally. Click a card to play.</p>
+    <div id="gamesGrid" class="grid"></div>
+    <p class="hint">More games coming soon. Want one added? Open a GitHub issue.</p>
+  </main>
+
+  <div id="gameWrap" hidden>
+    <div id="gameInner">
+      <div id="gameBar">
+        <strong id="gameName">Game</strong>
+        <span class="spacer"></span>
+        <button class="card-btn" id="fsBtn">Fullscreen</button>
+        <button class="card-btn" id="closeBtn">✕ Close</button>
+      </div>
+      <iframe id="gameFrame" title="game"></iframe>
     </div>
-    <script src="uv/uv.bundle.js"></script>
-    <script src="uv/uv.config.js"></script>
-    <script src="index.js"></script>
-    <script src="site.js"></script>
-    <script src="games.js"></script>
-    <script src="updates.js"></script>
+  </div>
+
+  <div id="drawerOverlay" hidden></div>
+  <aside id="drawer" hidden>
+    <h2>Settings <button id="drawerClose">✕</button></h2>
+    <label class="row-label">Theme</label>
+    <div class="theme-grid" id="themeGrid">
+      <button class="theme-dot" data-theme-pick="cherri" title="Cherri" style="background:linear-gradient(135deg,#ff6b8b,#c4344f)"></button>
+      <button class="theme-dot" data-theme-pick="midnight" title="Midnight" style="background:linear-gradient(135deg,#6ec1ff,#0b0f23)"></button>
+      <button class="theme-dot" data-theme-pick="void" title="Void" style="background:linear-gradient(135deg,#a855f7,#0e0018)"></button>
+      <button class="theme-dot" data-theme-pick="forest" title="Forest" style="background:linear-gradient(135deg,#6ee7a8,#0c1a12)"></button>
+      <button class="theme-dot" data-theme-pick="mono" title="Mono" style="background:linear-gradient(135deg,#e5e5e5,#000)"></button>
+    </div>
+    <label class="row-label">Tab cloak preset</label>
+    <div class="preset-grid">
+      <button data-cloak="classroom">Classroom</button>
+      <button data-cloak="docs">Google Docs</button>
+      <button data-cloak="drive">Google Drive</button>
+      <button data-cloak="khan">Khan Academy</button>
+      <button data-cloak="clever">Clever</button>
+      <button data-cloak="zaluea">Zaluea</button>
+    </div>
+    <button id="resetBtn" class="card-btn danger">Reset cloak</button>
+  </aside>
+
+  <script src="uv/uv.bundle.js?v=3"></script>
+  <script src="uv/uv.config.js?v=3"></script>
+  <script src="stealth.js?v=3"></script>
+  <script src="site.js?v=3"></script>
+  <script src="games.js?v=3"></script>
 </body>
 </html>

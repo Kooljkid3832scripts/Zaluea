@@ -1,50 +1,33 @@
+/* Backwards-compat shim: old pages called settings()/updates()/titleSet()/quickLink().
+   Real logic now lives in stealth.js + index.js. */
 function settings() {
-    var settings = document.getElementById("settings")
-
-    if (settings.style.display == "none") {
-        settings.style.display = "initial"
-    } else if (settings.style.display == "initial") {
-        settings.style.display = "none";
-    } else {
-        settings.style.display = "initial"
-    }
+  const d = document.getElementById('drawer');
+  const o = document.getElementById('drawerOverlay');
+  if (d) d.hidden = false;
+  if (o) o.hidden = false;
 }
-
 function updates() {
-    var settings = document.getElementById("updates")
-
-    if (settings.style.display == "none") {
-        settings.style.display = "initial"
-    } else if (settings.style.display == "initial") {
-        settings.style.display = "none";
-    } else {
-        settings.style.display = "initial"
-    }
+  const el = document.getElementById('updatespage');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
-
-if(localStorage.getItem("title").text != "") {
-    document.title = localStorage.getItem("title");
+function titleSet(t) {
+  if (window.ZalueaStealth) window.ZalueaStealth.applyCustom(t, '');
 }
-
-function titleSet(text) {
-    if(text != "") {
-        document.title = text;
-        localStorage.setItem("title", text);
-    }
-    
-    else {
-        localStorage.removeItem("title");
-        document.title = "Zaluea";
-    }
+function iconSet(u) {
+  if (window.ZalueaStealth) window.ZalueaStealth.applyCustom('', u);
 }
-
-function icoSet(text1) {
-    if(text != "") {
-        document.querySelector("link[rel= 'shortcut icon']").href = text1
-    }
-}
-
+// legacy typo name
+function icoSet(u) { iconSet(u); }
 function reset() {
-    localStorage.removeItem('title');
-    window.location.href = "";
+  try { localStorage.clear(); } catch (e) {}
+  location.reload();
+}
+function quickLink(enc) {
+  try {
+    const url = __uv$config.decodeUrl(enc);
+    if (window.zalueaGo) window.zalueaGo(url);
+    else location.href = __uv$config.prefix + enc;
+  } catch (e) {
+    location.href = __uv$config.prefix + enc;
+  }
 }

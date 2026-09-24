@@ -1,48 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cherri">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no">
-    <link rel="icon" type="image/x-icon" href="./Site/images/logo.png">
-    <link rel="stylesheet" href="index.css">
-    <title>Zaluea | Home</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <script>try{var t=localStorage.getItem("z_theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link id="favicon" rel="icon" type="image/png" href="images/logo.png?v=3" />
+  <link rel="stylesheet" href="index.css?v=3" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <title id="pageTitle">Zaluea</title>
 </head>
 <body>
-    <div class="bar">
-        <div class="main_title"><a href="/">andyum</a></div>
-        <div class="button games"><a href="games.html">Games</a></div>
-        <div class="button ytlink" onclick="quickLink('hvtrs8%2F-wuw%2Cymuvu%60e%2Ccmm-')">YouTube</div>
-        <div class="button tabconfig" onclick="settings()">Tab Config</div>
-        <div class="button updates_btn" onclick="updates()">Updates</div>
-        <div class="settings" id="settings">
+  <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 
-            <div class="settingsstuff title_main">Settings</div>
-            <center>
-                <input class="setTitle" placeholder="Title" onkeyup="titleSet(this.value)">
-                <input class="setIco" placeholder="Icon" onkeyup="iconSet(this.value)">
-                <div class="resetButton" onclick="reset()">Reset</div>
-            </center>
-        </div>
-        <div class="updates" id="updates">
-            <div class="updatetitle title_updates">Updates</div>
-            <center>
-                <div class="updatespage" id="updatespage"></div>
-            </center>
-        </div>
+  <nav class="nav glass">
+    <a class="brand" href="/">
+      <span class="logo">Z</span>
+      <span class="brand-name"><span>Zaluea</span></span>
+      <span id="statusPill" class="pill checking" title="Proxy backend status">checking…</span>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="nav-btn active">Home</a>
+      <a href="games.html" class="nav-btn">Games</a>
+      <button class="nav-btn" id="blankBtn" title="Open in about:blank (hides URL + history)">⧉ Blank</button>
+      <button class="nav-btn" id="cloakBtn" title="Instantly disguise tab as Google Classroom">🕶 Cloak</button>
+      <button class="nav-btn icon" id="settingsBtn" title="Settings">⚙</button>
     </div>
-    <div class="title">Ultraviolet</div>
-    <a href="#" target="_parent">Opens the linked document in the parent frame</a>
-    <center>
-        <form>
-            <input placeholder="Type or search a URL">
-            <div class="links">
-        </form>
-    </center>
-    <script src="uv/uv.bundle.js"></script>
-    <script src="uv/uv.config.js"></script>
-    <script src="index.js"></script>
-    <script src="updates.js"></script>
-    <script src="site.js"></script>
+  </nav>
+
+  <main class="hero">
+    <h1 class="title">Zaluea<span class="dot">.</span></h1>
+    <p class="subtitle">Fast, free &amp; stealthy web proxy. No logs. No setup.</p>
+
+    <form id="proxyForm" class="search glass" autocomplete="off">
+      <span class="search-icon">⌕</span>
+      <input id="proxyInput" placeholder="Search Google or type a URL…" spellcheck="false" />
+      <button type="submit" class="go">Go →</button>
+    </form>
+    <div id="proxyError" class="error" hidden></div>
+
+    <div class="chips">
+      <button data-url="https://www.youtube.com">▶ YouTube</button>
+      <button data-url="https://www.tiktok.com">♪ TikTok</button>
+      <button data-url="https://discord.com">◈ Discord</button>
+      <button data-url="https://www.google.com">G Google</button>
+      <button data-url="https://www.twitch.tv">✦ Twitch</button>
+      <button data-url="https://www.reddit.com">⬣ Reddit</button>
+    </div>
+
+    <div class="cards">
+      <div class="card glass">
+        <h3>⧉ about:blank mode</h3>
+        <p>Opens Zaluea inside a blank tab so the URL bar stays empty and it barely shows in history. Best trick for school Chromebooks.</p>
+        <button id="blankBtn2" class="card-btn">Launch blank</button>
+      </div>
+      <div class="card glass">
+        <h3>🕶 Tab cloak</h3>
+        <p>One click turns this tab into “Google Classroom”. Panic key <kbd>]</kbd> does it instantly.</p>
+        <button id="cloakBtn2" class="card-btn">Cloak now</button>
+      </div>
+      <div class="card glass">
+        <h3>🎮 Games</h3>
+        <p>Built-in unblocked games that run locally, no proxy needed.</p>
+        <a href="games.html" class="card-btn link">Browse games</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>Zaluea · free Ultraviolet proxy</span>
+    <span class="sep">·</span>
+    <a href="https://github.com/TheIcy/Zaluea" target="_blank" rel="noreferrer">GitHub</a>
+    <span class="sep">·</span>
+    <span id="bareLabel">bare: …</span>
+  </footer>
+
+  <div id="loader" hidden>
+    <div id="loaderBox">
+      <div class="spinner"></div>
+      <div id="loaderText">Connecting to proxy…</div>
+    </div>
+  </div>
+
+  <!-- Stealth viewer: keeps the address bar clean (no /service/ URL visible) -->
+  <div id="viewer" hidden>
+    <div id="viewerBar">
+      <button id="viewerBack" title="Back">←</button>
+      <button id="viewerFwd" title="Forward">→</button>
+      <button id="viewerReload" title="Reload">⟳</button>
+      <input id="viewerUrl" placeholder="Search or type URL…" />
+      <button id="viewerGo">Go</button>
+      <button id="viewerOpen" title="Open in new tab">⧉</button>
+      <button id="viewerClose" title="Close viewer">✕</button>
+    </div>
+    <iframe id="viewerFrame" title="proxy viewer"></iframe>
+  </div>
+
+  <!-- Settings drawer -->
+  <div id="drawerOverlay" hidden></div>
+  <aside id="drawer" hidden>
+    <h2>Settings <button id="drawerClose">✕</button></h2>
+
+    <label class="row-label">Theme</label>
+    <div class="theme-grid" id="themeGrid">
+      <button class="theme-dot" data-theme-pick="cherri" title="Cherri" style="background:linear-gradient(135deg,#ff6b8b,#c4344f)"></button>
+      <button class="theme-dot" data-theme-pick="midnight" title="Midnight" style="background:linear-gradient(135deg,#6ec1ff,#0b0f23)"></button>
+      <button class="theme-dot" data-theme-pick="void" title="Void" style="background:linear-gradient(135deg,#a855f7,#0e0018)"></button>
+      <button class="theme-dot" data-theme-pick="forest" title="Forest" style="background:linear-gradient(135deg,#6ee7a8,#0c1a12)"></button>
+      <button class="theme-dot" data-theme-pick="mono" title="Mono" style="background:linear-gradient(135deg,#e5e5e5,#000)"></button>
+    </div>
+
+    <label class="row-label">Tab cloak preset</label>
+    <div class="preset-grid">
+      <button data-cloak="classroom">Classroom</button>
+      <button data-cloak="docs">Google Docs</button>
+      <button data-cloak="drive">Google Drive</button>
+      <button data-cloak="khan">Khan Academy</button>
+      <button data-cloak="clever">Clever</button>
+      <button data-cloak="zaluea">Zaluea</button>
+    </div>
+
+    <label class="row-label">Custom title</label>
+    <input id="customTitle" class="text-in" placeholder="e.g. Math Homework" />
+    <label class="row-label">Custom icon URL</label>
+    <input id="customIcon" class="text-in" placeholder="https://…/favicon.ico" />
+    <button id="applyCustom" class="card-btn">Apply</button>
+
+    <label class="check"><input type="checkbox" id="stealthToggle" checked /> Stealth viewer (hide proxy URL in address bar)</label>
+    <label class="check"><input type="checkbox" id="blankToggle" /> Auto-launch in about:blank</label>
+
+    <label class="row-label">Panic key (instant cloak + go to Classroom)</label>
+    <input id="panicKey" class="text-in" maxlength="1" placeholder="]" />
+
+    <label class="row-label">Proxy backend (bare server)</label>
+    <input id="customBare" class="text-in" placeholder="https://your-server.com/bare/" />
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button id="useCustomBare" class="card-btn">Use custom</button>
+      <button id="useAutoBare" class="card-btn">Auto-detect</button>
+    </div>
+    <div id="diagBox" class="diag">backend: checking…</div>
+
+    <button id="resetBtn" class="card-btn danger">Reset all</button>
+    <p class="hint">Tip: press <kbd>]</kbd> anytime to panic-cloak. On a school Chromebook, host these files on any static host (GitHub Pages, Netlify, Cloudflare Pages) — no Node server needed, the app auto-uses a public backend.</p>
+  </aside>
+
+  <script src="uv/uv.bundle.js?v=3"></script>
+  <script src="uv/uv.config.js?v=3"></script>
+  <script src="stealth.js?v=3"></script>
+  <script src="index.js?v=3"></script>
 </body>
 </html>

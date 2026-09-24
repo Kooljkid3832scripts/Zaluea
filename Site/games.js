@@ -1,64 +1,61 @@
-var games = [
-    {name: "Flappy Bird", path: "games/flappybird/index.html"}
-];
+/* Zaluea games */
+(function () {
+  const games = [
+    { name: 'Flappy Bird', desc: 'Local · no proxy needed', path: 'games/flappybird/index.html', emoji: '🐤' },
+    { name: 'YouTube', desc: 'Via proxy', proxy: 'https://www.youtube.com', emoji: '▶' },
+    { name: 'TikTok', desc: 'Via proxy', proxy: 'https://www.tiktok.com', emoji: '♪' },
+    { name: 'Discord', desc: 'Via proxy', proxy: 'https://discord.com', emoji: '◈' },
+    { name: 'Twitch', desc: 'Via proxy', proxy: 'https://www.twitch.tv', emoji: '✦' }
+  ];
 
-var glist = document.getElementById("gameslist");
+  const grid = document.getElementById('gamesGrid');
+  const wrap = document.getElementById('gameWrap');
+  const frame = document.getElementById('gameFrame');
+  const gname = document.getElementById('gameName');
 
-for (let item of games) {
-    let a = document.createElement("a");
-    a.className = "gamebutton";
-    var title = document.createElement("gamebutton");
-    title.className = "gamebutton";
-    title.textContent = item.name;
-    a.appendChild(title);
-    a.href = "#";
-    a.onclick = function(e) {
-        if (e.target == a || e.target.tagName != "A") {
-            e.preventDefault();
-            loadGame(item.path)
-        }
+  function openLocal(item) {
+    gname.textContent = item.name;
+    frame.src = item.path;
+    wrap.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  async function openProxied(item) {
+    try {
+      if (!window.zalueaGo) {
+        // games.html doesn't load index.js — do a minimal proxy launch here
+        await navigator.serviceWorker.register('./sw.js', { scope: __uv$config.prefix });
+        location.href = __uv$config.prefix + __uv$config.encodeUrl(item.proxy);
+        return;
+      }
+      window.zalueaGo(item.proxy);
+    } catch (e) {
+      location.href = __uv$config.prefix + __uv$config.encodeUrl(item.proxy);
     }
+  }
 
-    glist.appendChild(a);
-}
+  games.forEach((g) => {
+    const card = document.createElement('div');
+    card.className = 'game-card glass';
+    card.innerHTML = '<div class="thumb">' + g.emoji + '</div><h4></h4><p></p>';
+    card.querySelector('h4').textContent = g.name;
+    card.querySelector('p').textContent = g.desc;
+    card.onclick = () => (g.path ? openLocal(g) : openProxied(g));
+    grid.appendChild(card);
+  });
 
-function loadGame(path) {
-    var button = document.getElementById('button');
-    var button1 = document.getElementById('button1');
-    var button2 = document.getElementById('button2');
-    var button3 = document.getElementById('button3');
-    var button_closegame = document.getElementById('button_closegame');
-    var button_fullscreengame = document.getElementById('button_fullscreengame');
-    var gameWindow = document.getElementById('gamewindow');
-    button.style.display = 'none';
-    button1.style.display = 'none';
-    button2.style.display = 'none';
-    button3.style.display = 'none';
-    button_closegame.style.display = 'initial';
-    button_fullscreengame.style.display = 'initial';
-    gameWindow.setAttribute('src', path);
-    gameWindow.style.display = 'initial';
-}
+  document.getElementById('closeBtn').onclick = () => {
+    wrap.hidden = true;
+    frame.removeAttribute('src');
+    document.body.style.overflow = '';
+  };
+  document.getElementById('fsBtn').onclick = () => {
+    if (frame.requestFullscreen) frame.requestFullscreen();
+  };
+  wrap.addEventListener('click', (e) => { if (e.target === wrap) document.getElementById('closeBtn').click(); });
 
-function closeGame() {
-    var button_closegame = document.getElementById('button_closegame');
-    var button_fullscreengame = document.getElementById('button_fullscreengame');
-    var button = document.getElementById('button');
-    var button1 = document.getElementById('button1');
-    var button2 = document.getElementById('button2');
-    var button3 = document.getElementById('button3');
-    var gameWindow = document.getElementById('gamewindow');
-    button_closegame.style.display = 'none';
-    button_fullscreengame.style.display = 'none';
-    button.style.display = 'initial';
-    button1.style.display = 'initial';
-    button2.style.display = 'initial';
-    button3.style.display = 'initial';
-    gameWindow.style.display = 'none';
-    gameWindow.removeAttribute('src');
-}
-
-function fullscreenGame() {
-    var gameWindow = document.getElementById('gamewindow');
-    gameWindow.requestFullscreen();
-}
+  // legacy function names used by old inline handlers (kept for safety)
+  window.loadGame = openLocal;
+  window.closeGame = () => document.getElementById('closeBtn').click();
+  window.fullscreenGame = () => document.getElementById('fsBtn').click();
+})();
